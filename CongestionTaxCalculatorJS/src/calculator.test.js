@@ -1,9 +1,21 @@
 const printTotalAmount = require("./calculator");
 
-test("Function under test doex X when Y", () => {
-  // Arrange and act
-  const result = true;
+describe('printTotalAmount', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
 
-  // Assert
-  expect(result).toBe(true);
+  afterEach(() => {
+    console.log.mockRestore();
+  });
+
+  it('should print the correct congestion charge amount', () => {
+
+    const dateTimeString = "2023-05-31 17:45";
+    const expectedOutput = "The total fee is 13 kr";
+
+    printTotalAmount(dateTimeString);
+
+    expect(console.log).toHaveBeenCalledWith(expectedOutput);
+  });
 });
