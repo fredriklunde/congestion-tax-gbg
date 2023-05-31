@@ -8,7 +8,7 @@ const TimeRange = {
   RANGE_7: { start: 1530, end: 1659, price: 18 },
   RANGE_8: { start: 1700, end: 1759, price: 13 },
   RANGE_9: { start: 1800, end: 1829, price: 8 },
-  RANGE_10: { start: 1830, end: 559, price: 0 }
+  RANGE_10: { start: 1830, end: 559, price: 0 },
 };
 
 function getPrice(timeString) {
@@ -30,32 +30,34 @@ function getPrice(timeString) {
 const printTotalAmount = (dateTimeStringList) => {
   var dateList = dateTimeStringList.split(", ");
   var sortedDateList = dateList.sort();
+  const maxAmountPerDay = 60;
+
   var totalFee = 0;
   var currentDate = extractDateFromDateTime(sortedDateList[0]);
   var sumForDate = 0;
-  sortedDateList.forEach(date => {
-    if(currentDate === extractDateFromDateTime(date)){
-      sumForDate += getPrice(date.substr(11, 5))
-      if(sumForDate > 60){
-        sumForDate = 60;
-      }
+  sortedDateList.forEach((date) => {
+    if (currentDate === extractDateFromDateTime(date)) {
+      sumForDate += getPrice(date.substr(11, 5));
+      sumForDate = Math.min(sumForDate, maxAmountPerDay);
+    } else {
+      currentDate = extractDateFromDateTime(date);
+      totalFee += sumForDate;
+      sumForDate = getPrice(extractTimeFromDateTime());
+      sumForDate = Math.min(sumForDate, maxAmountPerDay);
     }
-    else{
-      currentDate = extractDateFromDateTime(date)
-        totalFee += sumForDate;
-        sumForDate = getPrice(date.substr(11, 5))
-        if(sumForDate > 60){
-          sumForDate = 60;
-        }
-    }
+
   });
   totalFee += sumForDate;
 
   console.log(`The total fee is ${totalFee} kr`);
+};
+
+function extractTimeFromDateTime() {
+  return date.substr(11, 5);
 }
 
-const extractDateFromDateTime = (dateTimeString) => {
+function extractDateFromDateTime(dateTimeString){
   return dateTimeString.substr(0, 10);
-}
+};
 
 module.exports = printTotalAmount;
