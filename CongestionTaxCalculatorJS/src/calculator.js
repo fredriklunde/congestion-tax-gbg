@@ -27,9 +27,13 @@ function getPrice(timeString) {
   return 0;
 }
 
-const printTotalAmount = (dateTimeString) => {
-  const price = getPrice(dateTimeString.substr(11, 5));
-  console.log(`The total fee is ${price} kr`);
+const printTotalAmount = (dateTimeStringList) => {
+  var dateList = dateTimeStringList.split(", ");
+  var totalFee = 0;
+
+  dateList.forEach(date => totalFee += getPrice(date.substr(11, 5)));
+
+  console.log(`The total fee is ${totalFee} kr`);
 }
 
 module.exports = printTotalAmount;
