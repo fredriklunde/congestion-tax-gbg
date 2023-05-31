@@ -29,11 +29,33 @@ function getPrice(timeString) {
 
 const printTotalAmount = (dateTimeStringList) => {
   var dateList = dateTimeStringList.split(", ");
+  var sortedDateList = dateList.sort();
   var totalFee = 0;
-
-  dateList.forEach(date => totalFee += getPrice(date.substr(11, 5)));
+  var currentDate = extractDateFromDateTime(sortedDateList[0]);
+  var sumForDate = 0;
+  sortedDateList.forEach(date => {
+    if(currentDate === extractDateFromDateTime(date)){
+      sumForDate += getPrice(date.substr(11, 5))
+      if(sumForDate > 60){
+        sumForDate = 60;
+      }
+    }
+    else{
+      currentDate = extractDateFromDateTime(date)
+        totalFee += sumForDate;
+        sumForDate = getPrice(date.substr(11, 5))
+        if(sumForDate > 60){
+          sumForDate = 60;
+        }
+    }
+  });
+  totalFee += sumForDate;
 
   console.log(`The total fee is ${totalFee} kr`);
+}
+
+const extractDateFromDateTime = (dateTimeString) => {
+  return dateTimeString.substr(0, 10);
 }
 
 module.exports = printTotalAmount;

@@ -29,4 +29,15 @@ describe('printTotalAmount', () => {
     expect(console.log).toHaveBeenCalledWith(expectedOutput);
   });
 
+  it('should never print more than 60 kr per day', () => {
+
+
+    const dateTimeStringList = "2023-05-31 07:00, 2023-05-31 07:10, 2023-05-31 07:20, 2023-05-31 07:30";
+    const expectedOutput = "The total fee is 60 kr";
+
+    printTotalAmount(dateTimeStringList);
+
+    expect(console.log).toHaveBeenCalledWith(expectedOutput);
+  });
+
 });
